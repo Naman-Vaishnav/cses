@@ -1,66 +1,38 @@
-
+//package Dynamic_Programming;
 
 import java.io.DataInputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.TreeMap;
 
-public class ConcertTickets {
-    static void add(int x,TreeMap<Integer,Integer> ticketMap){
-       
-        Integer val=ticketMap.get(x);
-        if(val==null){
-            ticketMap.put(x, 1);
+public class DiceCombinations {
+    static int mod=(int)Math.pow(10, 9)+7;
+    static int findWays(int n){
+        if(n<0)return 0;
+        if(n==0)return 1;
+        int ans=0;
+        for(int i=1;i<=6;i++){
+            ans+=findWays(n-i);
         }
-        else ticketMap.put(x, val+1);
+        return ans;
     }
-
-    static void remove(int x,TreeMap<Integer,Integer> ticketMap){
-        Integer val=ticketMap.get(x);
-        if(val==1){
-            ticketMap.remove(x);
-        }
-        else{
-            ticketMap.put(x, val-1);
-        }
-    }
-    public static void main(String[] args) throws IOException{
+    public static void main(String[] args) throws IOException {
         Reader fr=new Reader();
-        int n,m;
-        n=fr.nextInt();
-        m=fr.nextInt();
-        TreeMap<Integer,Integer> ticketMap=new TreeMap<>();
-
-
-        for(int i=0;i<n;i++){
-            int x=fr.nextInt();
-            add(x,ticketMap);
-        }
-        StringBuffer res = new StringBuffer();
-        for(int i=0;i<m;i++){
-            int x=fr.nextInt();
-            Integer curAns=ticketMap.floorKey(x);
-            if(curAns==null){
-                res.append("-1\n");
-            }
-            else{
-                res.append(curAns+"\n");
-                remove(curAns,ticketMap);
+        int n=fr.nextInt();
+        //int ans=findWays(n);
+        int[] dp=new int[n+1];
+        dp[0]=1;
+        for(int i=1;i<=n;i++){
+            dp[i]=0;
+            for(int j=1;j<=6;j++){
+                if(i-j>=0)dp[i]+=dp[i-j];
+                dp[i]%=mod;
             }
         }
-        System.out.println(res);
 
-        
-
-
-
-
-
-    }
-
-
-
-
+        System.out.println(dp[n]);
+    }  
+    
+    
 
 
 

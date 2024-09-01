@@ -1,68 +1,57 @@
-
+//package Dynamic_Programming;
 
 import java.io.DataInputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.TreeMap;
+import java.util.Arrays;
 
-public class ConcertTickets {
-    static void add(int x,TreeMap<Integer,Integer> ticketMap){
-       
-        Integer val=ticketMap.get(x);
-        if(val==null){
-            ticketMap.put(x, 1);
+public class MinimizingCoins {
+    static int mx=(int)Math.pow(10, 6)+1;
+    static int minCoins(int x,int n,int[] c,int[][] dp){
+        if(x==0)return 0;
+        if(n==0)return mx;
+        if(dp[n][x]!=-1)return dp[n][x];
+        int ans=mx;
+        for(int i=1;i<=n;i++){
+            ans=Integer.min(ans, minCoins(x,n-1 ,c , dp));
+            if(x-c[n]>=0)ans=Integer.min(ans,1+minCoins(x-c[n],n ,c , dp));
         }
-        else ticketMap.put(x, val+1);
-    }
+        return dp[n][x]=ans;
 
-    static void remove(int x,TreeMap<Integer,Integer> ticketMap){
-        Integer val=ticketMap.get(x);
-        if(val==1){
-            ticketMap.remove(x);
-        }
-        else{
-            ticketMap.put(x, val-1);
-        }
     }
-    public static void main(String[] args) throws IOException{
+    public static void main(String[] args) throws IOException {
         Reader fr=new Reader();
-        int n,m;
+        int n,x;
         n=fr.nextInt();
-        m=fr.nextInt();
-        TreeMap<Integer,Integer> ticketMap=new TreeMap<>();
-
-
-        for(int i=0;i<n;i++){
-            int x=fr.nextInt();
-            add(x,ticketMap);
+        x=fr.nextInt();
+        int[] c=new int[n+1];
+        for(int i=1;i<=n;i++){
+            int temp=fr.nextInt();
+            c[i]=temp;
         }
-        StringBuffer res = new StringBuffer();
-        for(int i=0;i<m;i++){
-            int x=fr.nextInt();
-            Integer curAns=ticketMap.floorKey(x);
-            if(curAns==null){
-                res.append("-1\n");
-            }
-            else{
-                res.append(curAns+"\n");
-                remove(curAns,ticketMap);
-            }
-        }
-        System.out.println(res);
+        //int[][] dp=new int[n+1][x+1];
+        //for(int i=1;i<=n;i++){
+        //    Arrays.fill(dp[i], -1);
+       // }
+        //int ans=minCoins(x,n,c,dp);
+        //if(ans==mx)ans=-1;
+        //System.out.println(ans);
 
+        int[] dp=new int[x+1];
+        Arrays.fill(dp, mx);
+        dp[0]=0;
+        
+            for(int j=1;j<=x;j++){
+                for(int i=1;i<=n;i++){
+                    if(j-c[i]>=0)dp[j]=Math.min(dp[j],1+dp[j-c[i]]);
+                   
+                }
+            }
+            System.out.println(dp[x]==mx?-1:dp[x]);
         
 
 
-
-
-
     }
-
-
-
-
-
-
 
 
 
