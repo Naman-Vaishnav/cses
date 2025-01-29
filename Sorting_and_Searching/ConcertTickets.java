@@ -7,12 +7,7 @@ import java.util.TreeMap;
 
 public class ConcertTickets {
     static void add(int x,TreeMap<Integer,Integer> ticketMap){
-       
-        Integer val=ticketMap.get(x);
-        if(val==null){
-            ticketMap.put(x, 1);
-        }
-        else ticketMap.put(x, val+1);
+        ticketMap.put(x, ticketMap.getOrDefault(x, 0)+1);
     }
 
     static void remove(int x,TreeMap<Integer,Integer> ticketMap){
